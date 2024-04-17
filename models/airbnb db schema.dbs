@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="airbnb_dw_lgl" id="LogicalDesign-7f3" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="airbnb" >
+		<table name="dim_host" prior="dim_host " >
+			<column name="host_id" type="INT" jt="4" mandatory="y" />
+			<column name="host_name" type="VARCHAR" length="255" jt="12" />
+			<index name="pk_dim_host " unique="PRIMARY_KEY" >
+				<column name="host_id" />
+			</index>
+		</table>
+		<table name="dim_location" prior="Entity" >
+			<column name="city" type="VARCHAR" length="255" jt="12" />
+			<column name="location_id" prior="lcoation_id" type="INT" jt="4" mandatory="y" />
+			<column name="longitude" type="DOUBLE" jt="8" />
+			<column name="latitude" type="DOUBLE" jt="8" />
+			<column name="borough" type="VARCHAR" length="255" jt="12" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="dim_room" prior="Entity" >
+			<column name="room_type" type="VARCHAR" length="255" jt="12" />
+			<column name="room_type_id" prior="room_id" type="INT" jt="4" mandatory="y" />
+			<column name="availability" type="INT" jt="4" />
+			<index name="pk_dim_room" unique="PRIMARY_KEY" >
+				<column name="room_type_id" />
+			</index>
+		</table>
+		<table name="facts" prior="Entity" />
+		<table name="facts_listings" prior="facts_" >
+			<column name="min_nights" type="INT" jt="4" />
+			<column name="num_of_reviews" type="INT" jt="4" />
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<column name="price" type="DECIMAL" length="12" decimal="2" jt="3" />
+			<column name="host_id" type="INT" jt="4" mandatory="y" />
+			<column name="room_type_id" type="INT" jt="4" mandatory="y" />
+			<fk name="fk_facts_listings_dim_location" virtual="y" to_schema="airbnb.INSTANCE" to_table="dim_location" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="location_id" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_listings_dim_host" virtual="y" to_schema="airbnb.INSTANCE" to_table="dim_host" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="host_id" pk="host_id" />
+			</fk>
+			<fk name="fk_facts_listings_dim_room" virtual="y" to_schema="airbnb.INSTANCE" to_table="dim_room" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="room_type_id" pk="room_type_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-1a6a" show_relation="columns" >
+		<entity schema="airbnb.INSTANCE" name="dim_host" color="3986C1" x="272" y="208" />
+		<entity schema="airbnb.INSTANCE" name="dim_location" color="C1D8EE" x="464" y="560" />
+		<entity schema="airbnb.INSTANCE" name="dim_room" color="C1D8EE" x="720" y="208" />
+		<entity schema="airbnb.INSTANCE" name="facts_listings" color="C1D8EE" x="464" y="320" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Create new entities by right-clicking the layout. 
+- Double-click entity headers to edit.
+- For a better understanding of the schema, create multiple layouts.
+- Deploy the model into the database by converting it first to the physical design.]]></comment>
+		</callout>
+	</layout>
+</project>
